@@ -23,7 +23,7 @@ public class Category {
     @Column(name = "category_code", nullable = false, unique = true)
     private String categoryCode;
 
-    @Column(name = "categoryName", nullable = false)
+    @Column(name = "category_name", nullable = false)
     private String categoryName;
 
     @Column(name = "description")

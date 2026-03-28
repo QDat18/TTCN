@@ -1,6 +1,7 @@
 package com.example.be_phela.config;
 
 import com.example.be_phela.filter.JwtAuthenticationFilter;
+import com.example.be_phela.security.OAuth2SuccessHandler;
 import com.example.be_phela.service.AdminUserDetailsService;
 import com.example.be_phela.service.CustomerUserDetailsService;
 import lombok.AccessLevel;
@@ -28,31 +29,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     final AdminUserDetailsService adminUserDetailsService;
     final CustomerUserDetailsService customerUserDetailsService;
+    final OAuth2SuccessHandler oAuth2SuccessHandler;
+    final BCryptPasswordEncoder passwordEncoder;
 
     @Value("${jwt.signer-key}")
     private String signerKey;
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(signerKey);
-    }
 
     @Bean
     @Primary
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider adminProvider = new DaoAuthenticationProvider();
         adminProvider.setUserDetailsService(adminUserDetailsService);
-        adminProvider.setPasswordEncoder(passwordEncoder());
+        adminProvider.setPasswordEncoder(passwordEncoder);
         adminProvider.setHideUserNotFoundExceptions(false);
 
         DaoAuthenticationProvider customerProvider = new DaoAuthenticationProvider();
         customerProvider.setUserDetailsService(customerUserDetailsService);
-        customerProvider.setPasswordEncoder(passwordEncoder());
+        customerProvider.setPasswordEncoder(passwordEncoder);
         customerProvider.setHideUserNotFoundExceptions(false);
 
         return new ProviderManager(adminProvider, customerProvider);
@@ -68,7 +61,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authenticationManager(authenticationManager())
+                // ĐÃ FIX: Comment dòng này lại để không ghi đè mất Provider của OAuth2
+                // .authenticationManager(authenticationManager())
                 .authorizeHttpRequests(registry -> {
                     // Allow CORS preflight requests (OPTIONS method)
                     registry.requestMatchers(request -> "OPTIONS".equals(request.getMethod())).permitAll();
@@ -96,6 +90,8 @@ public class SecurityConfig {
                             "/api/payment/payment-cancel",
                             "/api/payment/payos-webhook",
                             "/ws/**",
+                            "/login/oauth2/**",
+                            "/oauth2/**",
                             "/error"
                     ).permitAll();
 
@@ -105,12 +101,15 @@ public class SecurityConfig {
 
                     // Customer endpoints - require customer role
                     registry.requestMatchers("/api/customer/**")
-                            .hasAnyAuthority("ROLE_CUSTOMER");
+                            .hasAnyAuthority("ROLE_CUSTOMER", "ROLE_ADMIN");
 
                     // All other requests require authentication
                     registry.anyRequest().authenticated();
                 })
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2SuccessHandler)
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(signerKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }

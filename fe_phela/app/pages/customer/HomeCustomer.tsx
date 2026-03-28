@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { getLatestActiveBanners } from '~/services/bannerService';
 import Header from '~/components/customer/Header'
 import Footer from '~/components/customer/Footer'
 import home from '~/assets/images/home.jpg';
-import '~/assets/css/DeliveryAddress.css';
 import ChatWidget from '~/components/customer/ChatWidget';
-
+import { motion, AnimatePresence } from 'framer-motion';
+import ScrollReveal from '~/components/common/ScrollReveal';
 
 interface Banner {
     bannerId: string;
@@ -26,7 +26,6 @@ const Home = () => {
                 setBanners(data.filter(banner => banner.imageUrl)); 
             } catch (error) {
                 console.error("Failed to fetch banners:", error);
-                toast.error('Không thể tải banner.');
             } finally {
                 setLoading(false);
             }
@@ -35,102 +34,95 @@ const Home = () => {
         fetchBanners();
     }, []);
 
-    const handlePrev = () => {
-        setCurrentBannerIndex((prevIndex) => 
-            prevIndex === 0 ? banners.length - 1 : prevIndex - 1
-        );
+    const nextBanner = () => {
+        setCurrentBannerIndex((prev) => (prev + 1) % banners.length);
     };
 
-    const handleNext = () => {
-        setCurrentBannerIndex((prevIndex) => 
-            prevIndex === banners.length - 1 ? 0 : prevIndex + 1
-        );
-    };
-
+    useEffect(() => {
+        if (banners.length > 1) {
+            const timer = setInterval(nextBanner, 5000);
+            return () => clearInterval(timer);
+        }
+    }, [banners]);
 
     const currentBanner = banners.length > 0 ? banners[currentBannerIndex] : null;
 
     return (
-        <div>
+        <div className="min-h-screen text-white">
             <Header />
             <ChatWidget />
-            {/* Phần Banner */}
-            <div className="relative w-full h-screen bg-black">
-                {loading ? (
-                    <div className="flex items-center justify-center h-full text-white">Đang tải banner...</div>
-                ) : currentBanner ? (
-                    <div
-                        key={currentBanner.bannerId} 
-                        className="w-full h-full bg-cover bg-center transition-opacity duration-700 ease-in-out hover:brightness-75"
-                        style={{ backgroundImage: `url(${currentBanner.imageUrl})` }}
-                    >
-                      
-                    </div>
-                ) : (
-                    <div className="flex items-center justify-center h-full text-white">
-                        Không có banner để hiển thị.
-                    </div>
-                )}
+            
+            {/* Banner Section */}
+            <div className="relative w-full h-[70vh] md:h-[85vh] overflow-hidden pt-16">
+                <AnimatePresence mode="wait">
+                    {loading ? (
+                        <motion.div 
+                            key="loading"
+                            className="absolute inset-0 flex items-center justify-center bg-[#1f120b]"
+                        >
+                             <div className="w-10 h-10 border-4 border-white/10 border-t-[#d48437] rounded-full animate-spin" />
+                        </motion.div>
+                    ) : currentBanner ? (
+                        <motion.div
+                            key={currentBanner.bannerId}
+                            initial={{ opacity: 0, scale: 1.05 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 1 }}
+                            className="absolute inset-0 bg-cover bg-center"
+                            style={{ backgroundImage: `url(${currentBanner.imageUrl})` }}
+                        >
+                            <div className="absolute inset-0 bg-black/10" />
+                        </motion.div>
+                    ) : null}
+                </AnimatePresence>
                 
-                {/* Nút điều hướng chỉ hiển thị khi có nhiều hơn 1 banner */}
-                {banners.length > 1 && (
-                    <>
-                        <button
-                            onClick={handlePrev}
-                            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white rounded-full p-3 z-10 hover:bg-opacity-60 transition-all"
-                            aria-label="Previous Banner"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black bg-opacity-40 text-white rounded-full p-3 z-10 hover:bg-opacity-60 transition-all"
-                            aria-label="Next Banner"
-                        >
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                        </button>
-                    </>
-                )}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center z-10">
+                    <ScrollReveal>
+                        <h1 className="text-white text-7xl md:text-9xl font-black tracking-tighter mb-4 drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] uppercase italic">
+                            Phê La
+                        </h1>
+                        <p className="text-[#d48437] text-xs md:text-sm tracking-[0.5em] font-black uppercase drop-shadow-md">
+                            Nốt Hương Đặc Sản
+                        </p>
+                    </ScrollReveal>
+                </div>
             </div>
             
-            {/* Phần nội dung */}
-            <div className="container mx-auto px-4 md:px-8 py-12 md:py-20 flex-1">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">PHÊ LA VÀ NHỮNG ĐIỀU KHÁC BIỆT</h2>
-                    <div className="w-20 h-1 bg-amber-600 mx-auto"></div>
-                </div>
+            {/* Content Section */}
+            <div className="max-w-7xl mx-auto px-6 py-24">
+                <ScrollReveal>
+                    <div className="text-center mb-24">
+                        <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tight leading-none">Phê La <span className="text-[#d48437]">&</span> Những Điều Khác Biệt</h2>
+                        <div className="w-24 h-1 bg-[#d48437] mx-auto rounded-full opacity-40"></div>
+                    </div>
+                </ScrollReveal>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-16">
-                    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">CÂU CHUYỆN THƯƠNG HIỆU</h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Nốt Hương Đặc Sản - Phê La luôn trân quý, nâng niu những giá trị Nguyên Bản ở mỗi vùng đất mà chúng tôi đi qua, nơi tâm hồn được đồng điệu với thiên nhiên, với nỗi vất vả nhọc nhằn của người nông dân; cảm nhận được hết thảy những tầng hương ẩn sâu trong từng nguyên liệu.
-                        </p>
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                    <ScrollReveal delay={0.3}>
+                        <div className="space-y-8">
+                            <h3 className="text-4xl font-black text-white uppercase tracking-tighter">Câu Chuyện Thương Hiệu</h3>
+                            <p className="text-white/50 leading-relaxed text-xl font-bold">
+                                Nốt Hương Đặc Sản - Phê La luôn trân quý, nâng niu những giá trị Nguyên Bản ở mỗi vùng đất mà chúng tôi đi qua, nơi tâm hồn được đồng điệu với thiên nhiên, với nỗi vất vả nhọc nhằn của người nông dân.
+                            </p>
+                            <Link 
+                                to="/product" 
+                                className="inline-block bg-[#d48437] text-white px-10 py-5 rounded-full font-black text-xs tracking-[0.2em] uppercase hover:bg-[#e59447] transition-all shadow-2xl shadow-[#d48437]/20 hover:-translate-y-1 active:scale-95"
+                            >
+                                Khám phá ngay
+                            </Link>
+                        </div>
+                    </ScrollReveal>
                     
-                    <div className="flex items-center justify-center">
-                        <img 
-                            src={home} 
-                            alt="Phê La" 
-                            className="rounded-lg shadow-md w-full h-auto max-h-80 object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                    </div>
-                    
-                    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-                        <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">NGUYÊN LIỆU ĐẶC SẢN</h3>
-                        <p className="text-gray-600 leading-relaxed">
-                            Trà Ô Long đặc sản tại Phê La còn được ươm trồng với phương pháp chăm bón hữu cơ, hoàn toàn với trứng gà, đậu nành và thu hái thủ công để có được những búp trà tươi và non nhất, tạo nên điểm khác biệt mạnh mẽ so với các thương hiệu khác.
-                        </p>
-                    </div>
-                </div>
-                
-                <div className="text-center">
-                    <Link 
-                        to="/ve-chung-toi" 
-                        className="inline-block bg-primary text-white font-medium py-3 px-8 rounded-full transition-all duration-300 shadow-md hover:shadow-lg"
-                    >
-                        Xem thêm
-                    </Link>
+                    <ScrollReveal delay={0.5}>
+                        <div className="relative rounded-[2rem] overflow-hidden shadow-2xl">
+                            <img 
+                                src={home} 
+                                alt="Phê La" 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    </ScrollReveal>
                 </div>
             </div>
             <Footer />

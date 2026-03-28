@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeadOrder from '~/components/customer/HeadOrder';
-import '~/assets/css/DeliveryAddress.css'
 import api from '~/config/axios';
 import { useAuth } from '~/AuthContext';
 
@@ -14,6 +13,8 @@ interface Product {
 
 interface CartItem {
   productId: string;
+  productSizeId?: string;
+  productSizeName?: string;
   quantity: number;
   amount: number;
   note: string;
@@ -197,11 +198,11 @@ const Payment = () => {
   const totalDiscount = cart.promotionCarts.reduce((sum, promo) => sum + promo.discountAmount, 0);
 
   return (
-    <div>
+    <div className="min-h-screen bg-[#FCF8F1]">
       <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
         <HeadOrder />
       </div>
-      <div className="container mx-auto mt-20 p-4 max-w-4xl">
+      <div className="container mx-auto pt-24 pb-4 px-4 max-w-4xl">
         <h1 className="text-3xl font-bold mb-6 text-center">Xác nhận Đơn hàng</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -223,7 +224,11 @@ const Payment = () => {
                 {cart.cartItems.map(item => (
                   <div key={item.productId} className="flex justify-between items-center text-sm">
                     <div>
-                      <p className="font-medium">{item.product?.productName || 'Sản phẩm'} (x{item.quantity})</p>
+                      <p className="font-medium">
+                        {item.product?.productName || 'Sản phẩm'}
+                        {item.productSizeName && <span className="ml-1 text-xs text-gray-500">({item.productSizeName})</span>}
+                        (x{item.quantity})
+                      </p>
                       {item.note && <p className="text-xs text-gray-500 mt-1">{item.note}</p>}
                     </div>
                     <span className="text-gray-600">{item.amount.toLocaleString()} VND</span>

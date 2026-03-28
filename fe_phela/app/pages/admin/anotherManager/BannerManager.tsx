@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Header from '~/components/admin/Header';
 import Modal from '~/components/admin/Modal';
 import { getAllBannersAdmin, createBanner, deleteBanner, updateBannerStatus, BannerStatus } from '~/services/bannerService';
 import { FiLock } from 'react-icons/fi';
 import { useAuth } from '~/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import '~/assets/css/DeliveryAddress.css'
 
 interface Banner {
     bannerId: string;

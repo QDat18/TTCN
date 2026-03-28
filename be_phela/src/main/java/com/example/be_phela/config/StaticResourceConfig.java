@@ -17,10 +17,16 @@ public class StaticResourceConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Cấu hình để serve CV files
         String cvPath = Paths.get(cvUploadDir).toAbsolutePath().normalize().toString();
+        // Cấu hình để serve các file khác trong uploads (như banners)
+        String uploadPath = Paths.get("uploads").toAbsolutePath().normalize().toString();
 
         registry.addResourceHandler("/uploads/cv/**")
                 .addResourceLocations("file:" + cvPath + "/")
-                .setCachePeriod(3600); // Cache 1 hour
+                .setCachePeriod(3600);
+
+        registry.addResourceHandler("/uploads/**")
+                .addResourceLocations("file:" + uploadPath + "/")
+                .setCachePeriod(3600);
 
         // Có thể thêm các static resources khác nếu cần
         registry.addResourceHandler("/static/**")

@@ -26,6 +26,10 @@ public class OrderItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_size_id")
+    private ProductSize productSize;
+
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
@@ -34,4 +38,7 @@ public class OrderItem {
 
     @Column(name = "note")
     private String note;
+
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private java.util.List<OrderItemTopping> selectedToppings;
 }

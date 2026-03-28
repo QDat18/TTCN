@@ -26,10 +26,10 @@ public class News {
     private String summary;
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
-    @Column(name = "thumbnailUrl")
+    @Column(name = "thumbnail_url")
     private String thumbnailUrl;
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

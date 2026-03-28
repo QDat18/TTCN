@@ -25,6 +25,8 @@ interface AdminUser extends UserBase {
 interface CustomerUser extends UserBase {
   type: 'customer';
   customerId: string;
+  fullname: string;
+  phone: string;
   email: string;
   gender: string;
   latitude?: number;

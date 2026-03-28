@@ -99,6 +99,8 @@ public class CustomerService implements ICustomerService {
 
         customer.setEmail(customerUpdateDTO.getEmail());
         customer.setGender(customerUpdateDTO.getGender());
+        customer.setFullname(customerUpdateDTO.getFullname());
+        customer.setPhone(customerUpdateDTO.getPhone());
         Customer updatedCustomer = customerRepository.save(customer);
         return customerMapper.toCustomerResponseDTO(updatedCustomer);
     }

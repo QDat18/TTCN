@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import "../../assets/css/Header.css";
+// Header.css is loaded via root.tsx links
 import logo from "../../assets/images/logo.png";
 import menuData from '../../data/menuAdmin.json';
 import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";

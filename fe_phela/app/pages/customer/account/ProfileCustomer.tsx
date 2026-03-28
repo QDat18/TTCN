@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Header from '~/components/customer/Header';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
 import api from '~/config/axios';
 import { FiEdit, FiLock, FiSave, FiX, FiUser, FiMail, FiAward, FiMapPin } from 'react-icons/fi';
-import '~/assets/css/DeliveryAddress.css'
 
 interface Customer {
   username: string;
@@ -211,11 +209,11 @@ const ProfileCustomer = () => {
   const tierInfo = getTierInfo(memberTier);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#FCF8F1]">
       <ToastContainer position="top-right" autoClose={3000} />
       <Header />
 
-      <div className="container mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 pt-24 pb-6 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Thông tin tài khoản</h1>
         </div>

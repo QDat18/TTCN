@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import HeadOrder from '~/components/customer/HeadOrder';
-import '~/assets/css/DeliveryAddress.css'; // Assuming you have some styles for this component
 import api from '~/config/axios';
 import { useAuth } from '~/AuthContext';
 import { FaMapMarkerAlt, FaEdit, FaTrash, FaStar, FaRegStar, FaSearchLocation } from 'react-icons/fa';
@@ -19,6 +18,8 @@ interface Address {
   longitude: number;
   isDefault: boolean;
 }
+
+
 
 interface GoongPrediction {
   description: string;
@@ -593,8 +594,8 @@ const DeliveryAddress = () => {
       city: '',
       district: '',
       ward: '',
-      recipientName: '',
-      phone: '',
+      recipientName: user && user.type === 'customer' ? (user as any).fullname || '' : '',
+      phone: user && user.type === 'customer' ? (user as any).phone || '' : '',
       detailedAddress: '',
       latitude: 0,
       longitude: 0,

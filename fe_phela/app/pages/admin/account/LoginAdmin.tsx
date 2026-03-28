@@ -4,7 +4,6 @@ import { FaFacebookF, FaGoogle } from "react-icons/fa";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import { useAuth } from "~/AuthContext";
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import api from '~/config/axios';
 import { sendOtpForAdminPasswordReset, verifyOtpAndResetAdminPassword } from '~/services/authServices';
 
@@ -110,47 +109,51 @@ const LoginAdmin = () => {
         <div className="flex flex-col justify-center items-center p-10 bg-white h-screen">
             <h2 className="text-3xl font-bold mb-6">Login</h2>
 
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="p-2 mb-4 w-80 rounded border"
-            />
-            <div className="relative w-80 mb-4">
+            <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="flex flex-col items-center">
                 <input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="p-2 w-full rounded border pr-10"
+                    type="text"
+                    placeholder="Username"
+                    autoComplete="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="p-2 mb-4 w-80 rounded border"
                 />
+                <div className="relative w-80 mb-4">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="p-2 w-full rounded border pr-10"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
+                        aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    >
+                        {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                </div>
+
+                <div className="flex justify-between w-80 mb-4">
+                    <label className="flex items-center">
+                        <input type="checkbox" className="mr-2" /> Remember me
+                    </label>
+                    <a href="#" className="text-sm text-gray-500" onClick={(e) => { e.preventDefault(); setShowForgotPassword(true); setResetStage('email'); }}>
+                        Forgot password?
+                    </a>
+                </div>
+
                 <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
-                    aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    type="submit"
+                    disabled={loading}
+                    className="w-64 p-2 bg-yellow-50 text-black rounded hover:bg-yellow-100 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 drop-shadow-lg disabled:bg-gray-400"
                 >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                    {loading ? 'Đang đăng nhập...' : 'Login'}
                 </button>
-            </div>
-
-            <div className="flex justify-between w-80 mb-4">
-                <label className="flex items-center">
-                    <input type="checkbox" className="mr-2" /> Remember me
-                </label>
-                <a href="#" className="text-sm text-gray-500" onClick={() => { setShowForgotPassword(true); setResetStage('email'); }}>
-                    Forgot password?
-                </a>
-            </div>
-
-            <button
-                onClick={handleLogin}
-                disabled={loading}
-                className="w-64 p-2 bg-yellow-50 text-black rounded hover:bg-yellow-100 transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 drop-shadow-lg disabled:bg-gray-400"
-            >
-                {loading ? 'Đang đăng nhập...' : 'Login'}
-            </button>
+            </form>
 
 
             {/* Forgot Password Section for Admin */}
@@ -164,6 +167,7 @@ const LoginAdmin = () => {
                                 <input
                                     type="email"
                                     placeholder="Email của bạn"
+                                    autoComplete="email"
                                     className="p-2 mb-4 w-full rounded border max-w-sm" 
                                     value={forgotPasswordEmail}
                                     onChange={(e) => setForgotPasswordEmail(e.target.value)}
@@ -199,6 +203,7 @@ const LoginAdmin = () => {
                                 <input
                                     type="password"
                                     placeholder="Mật khẩu mới"
+                                    autoComplete="new-password"
                                     className="p-2 mb-4 w-full rounded border max-w-sm"
                                     value={newPassword}
                                     onChange={(e) => setNewPassword(e.target.value)}
@@ -206,6 +211,7 @@ const LoginAdmin = () => {
                                 <input
                                     type="password"
                                     placeholder="Xác nhận mật khẩu mới"
+                                    autoComplete="new-password"
                                     className="p-2 mb-4 w-full rounded border max-w-sm"
                                     value={confirmNewPassword}
                                     onChange={(e) => setConfirmNewPassword(e.target.value)}

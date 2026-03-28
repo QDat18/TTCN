@@ -24,4 +24,6 @@ public class CustomerResponseDTO {
     Status status;
     Double pointUse;
     long orderCancelCount;
+    String fullname;
+    String phone;
 }

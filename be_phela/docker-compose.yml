@@ -1,18 +1,31 @@
-version: '3.8'
 services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=phela
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database_pg.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./seed_data.sql:/docker-entrypoint-initdb.d/02_seed.sql
+
   phela_app:
     build: .
     image: latest
     restart: unless-stopped
+    depends_on:
+      - db
     ports:
       - "${APP_PORT:-8080}:8080"
     environment:
       # Database Configuration
-      - DB_HOST=host.docker.internal
-      - DB_PORT=3306
-      - DB_NAME=phela
-      - DB_USERNAME=your_mysql_user
-      - DB_PASSWORD=your_mysql_password
+      - DB_URL=jdbc:postgresql://db:5432/phela
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
 
       # JWT Configuration
       - JWT_SIGNER_KEY=${JWT_SIGNER_KEY}
@@ -45,3 +58,6 @@ services:
       # Hibernate Configuration
       - JPA_HIBERNATE_DDL_AUTO=${JPA_HIBERNATE_DDL_AUTO:-update}
       - JPA_SHOW_SQL=${JPA_SHOW_SQL:-false}
+
+volumes:
+  postgres_data:

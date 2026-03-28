@@ -46,6 +46,7 @@ public class Address {
     private Double longitude;
 
     // Đánh dấu mặc định
+    @Builder.Default
     @Column(name = "is_default", nullable = false)
     private Boolean isDefault = false;
 

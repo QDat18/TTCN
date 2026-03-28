@@ -25,12 +25,12 @@ export const notify = {
     toast.success(
       <div className="flex items-center gap-3">
         <FiCheckCircle className="text-green-500 text-xl flex-shrink-0" />
-        <span className="text-gray-800 font-medium">{message}</span>
+        <span className="text-[#fdfaf6] font-medium">{message}</span>
       </div>,
       {
         ...defaultToastConfig,
         ...options,
-        className: 'bg-white border-l-4 border-green-500',
+        className: 'bg-[#2b1e16] border-l-4 border-green-500',
         progressClassName: 'bg-green-500',
       }
     );
@@ -40,13 +40,13 @@ export const notify = {
     toast.error(
       <div className="flex items-center gap-3">
         <FiXCircle className="text-red-500 text-xl flex-shrink-0" />
-        <span className="text-gray-800 font-medium">{message}</span>
+        <span className="text-[#fdfaf6] font-medium">{message}</span>
       </div>,
       {
         ...defaultToastConfig,
         autoClose: 5000, // Error messages stay longer
         ...options,
-        className: 'bg-white border-l-4 border-red-500',
+        className: 'bg-[#2b1e16] border-l-4 border-red-500',
         progressClassName: 'bg-red-500',
       }
     );
@@ -56,12 +56,12 @@ export const notify = {
     toast.warning(
       <div className="flex items-center gap-3">
         <FiAlertCircle className="text-amber-500 text-xl flex-shrink-0" />
-        <span className="text-gray-800 font-medium">{message}</span>
+        <span className="text-[#fdfaf6] font-medium">{message}</span>
       </div>,
       {
         ...defaultToastConfig,
         ...options,
-        className: 'bg-white border-l-4 border-amber-500',
+        className: 'bg-[#2b1e16] border-l-4 border-amber-500',
         progressClassName: 'bg-amber-500',
       }
     );
@@ -71,12 +71,12 @@ export const notify = {
     toast.info(
       <div className="flex items-center gap-3">
         <FiInfo className="text-blue-500 text-xl flex-shrink-0" />
-        <span className="text-gray-800 font-medium">{message}</span>
+        <span className="text-[#fdfaf6] font-medium">{message}</span>
       </div>,
       {
         ...defaultToastConfig,
         ...options,
-        className: 'bg-white border-l-4 border-blue-500',
+        className: 'bg-[#2b1e16] border-l-4 border-blue-500',
         progressClassName: 'bg-blue-500',
       }
     );
@@ -87,12 +87,12 @@ export const notify = {
     return toast.loading(
       <div className="flex items-center gap-3">
         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-amber-600"></div>
-        <span className="text-gray-800 font-medium">{message}</span>
+        <span className="text-[#fdfaf6] font-medium">{message}</span>
       </div>,
       {
         ...defaultToastConfig,
         autoClose: false,
-        className: 'bg-white border-l-4 border-amber-600',
+        className: 'bg-[#2b1e16] border-l-4 border-amber-600',
       }
     );
   },
@@ -124,13 +124,13 @@ export const notify = {
       render: (
         <div className="flex items-center gap-3">
           {icons[type]}
-          <span className="text-gray-800 font-medium">{message}</span>
+          <span className="text-[#fdfaf6] font-medium">{message}</span>
         </div>
       ),
       type: type,
       isLoading: false,
       autoClose: 4000,
-      className: `bg-white border-l-4 ${colors[type]}`,
+      className: `bg-[#2b1e16] border-l-4 ${colors[type]}`,
       progressClassName: progressColors[type],
     });
   },
@@ -174,7 +174,8 @@ export const toastContainerConfig = {
   pauseOnFocusLoss: true,
   draggable: true,
   pauseOnHover: true,
-  theme: 'light' as const,
+  target: 'html', // Applying to higher level if needed
+  theme: 'dark' as const,
   transition: Slide,
   style: {
     top: '80px', // Below header

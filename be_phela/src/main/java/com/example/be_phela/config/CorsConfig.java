@@ -1,6 +1,7 @@
 package com.example.be_phela.config;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,11 +14,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Configuration
 public class CorsConfig {
+    private static final Logger log = LoggerFactory.getLogger(CorsConfig.class);
 
-    @Value("${cors.allowed-origins:http://localhost:3000,http://localhost:3001,https://phela-customer-w519.onrender.com,https://phela-admin.onrender.com}")
+    @Value("${cors.allowed-origins:http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:5173,https://phela-customer-w519.onrender.com,https://phela-admin.onrender.com}")
     private String allowedOrigins;
 
     @Bean

@@ -41,6 +41,7 @@ const customerRoutes: RouteConfig = [
     route("my-address", "routes/deliveryAddress.tsx"),
     route("my-orders", "routes/myOrders.tsx"),
     route("my-orders/:orderId", "routes/orderDetail.tsx"),
+    route("oauth2/callback", "routes/oauth2Callback.tsx"),
 ];
 
 const adminRoutes: RouteConfig = [

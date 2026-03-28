@@ -1,0 +1,112 @@
+/* phela-theme.css (Refined Global Dark Theme) */
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --phela-bg: #1e140d;
+    --phela-card: #2b1e16;
+    --phela-input: #3c2f2f;
+    --phela-text: #fdfaf6;
+    --phela-text-muted: #a69b91;
+    --phela-border: #4a3a2a;
+    --phela-primary: #d4a373;
+    --phela-primary-hover: #b38b59;
+  }
+
+  .phela-dark {
+    background-color: var(--phela-bg);
+    color: var(--phela-text);
+  }
+
+  /* Global Overrides for all "Bright" utility classes when phela-dark is on the body */
+  .phela-dark .bg-white,
+  .phela-dark .bg-gray-50,
+  .phela-dark .bg-gray-100,
+  .phela-dark .bg-gray-200,
+  .phela-dark .bg-slate-50,
+  .phela-dark .bg-slate-100,
+  .phela-dark .bg-zinc-50,
+  .phela-dark .bg-zinc-100,
+  .phela-dark .bg-neutral-50,
+  .phela-dark .bg-neutral-100,
+  .phela-dark .bg-yellow-50 {
+    background-color: var(--phela-card) !important;
+  }
+  
+  /* Text Overrides */
+  .phela-dark .text-gray-950,
+  .phela-dark .text-gray-900,
+  .phela-dark .text-gray-800, 
+  .phela-dark .text-gray-700,
+  .phela-dark .text-slate-900,
+  .phela-dark .text-slate-800,
+  .phela-dark .text-black {
+    color: var(--phela-text) !important;
+  }
+  
+  .phela-dark .text-gray-400,
+  .phela-dark .text-gray-500,
+  .phela-dark .text-gray-600,
+  .phela-dark .text-slate-500,
+  .phela-dark .text-slate-600 {
+    color: var(--phela-text-muted) !important;
+  }
+
+  /* Border Overrides */
+  .phela-dark .border,
+  .phela-dark .border-gray-100,
+  .phela-dark .border-gray-200,
+  .phela-dark .border-gray-300,
+  .phela-dark .border-slate-200,
+  .phela-dark .divide-y > * {
+    border-color: var(--phela-border) !important;
+  }
+
+  /* Form Elements */
+  .phela-dark input, 
+  .phela-dark select, 
+  .phela-dark textarea {
+    background-color: var(--phela-input) !important;
+    color: var(--phela-text) !important;
+    border-color: var(--phela-border) !important;
+  }
+  
+  .phela-dark input::placeholder {
+    color: var(--phela-text-muted) !important;
+    opacity: 0.7;
+  }
+
+  /* Buttons */
+  .phela-dark .bg-primary,
+  .phela-dark .btn-primary {
+    background-color: var(--phela-primary) !important;
+    color: #1e140d !important;
+    font-weight: 600 !important;
+  }
+  
+  .phela-dark .bg-primary:hover,
+  .phela-dark .btn-primary:hover {
+    background-color: var(--phela-primary-hover) !important;
+  }
+
+  /* Special fix for the Login button which had bg-yellow-50 */
+  .phela-dark button.bg-yellow-50 {
+    background-color: var(--phela-primary) !important;
+    color: #1e140d !important;
+  }
+
+  /* Shadow Overrides */
+  .phela-dark .shadow-sm,
+  .phela-dark .shadow-md,
+  .phela-dark .shadow-lg,
+  .phela-dark .shadow-xl,
+  .phela-dark .shadow-2xl {
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.7) !important;
+  }
+}
+
+/* Ensure the HTML/Body starts dark to avoid flashes */
+html.phela-dark, 
+body.phela-dark {
+  background-color: #1e140d;
+}

@@ -3,8 +3,10 @@ import api from '../config/axios';
 // Interface cho dữ liệu Customer
 interface Customer {
   id: string;
+  fullname: string;
   username: string;
   email: string;
+  phone: string;
   gender: string;
   latitude?: number; 
   longitude?: number;

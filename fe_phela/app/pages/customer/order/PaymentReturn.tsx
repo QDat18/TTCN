@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import '~/assets/css/DeliveryAddress.css'
 
 const PaymentReturn = () => {
     const [searchParams] = useSearchParams();

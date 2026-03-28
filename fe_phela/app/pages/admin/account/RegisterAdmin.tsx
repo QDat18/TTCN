@@ -86,93 +86,103 @@ const RegisterAdmin = () => {
             <h2 className="text-3xl font-bold mb-6">Admin Register</h2>
 
             {/* Các trường input không thay đổi */}
-            <input
-                type="text"
-                value={formData.fullname}
-                onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
-                placeholder="Fullname"
-                className="p-2 mb-4 w-80 rounded border"
-            />
-            <input
-                type="text"
-                value={formData.username}
-                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                placeholder="Username"
-                className="p-2 mb-4 w-80 rounded border"
-            />
-            <div className="relative">
+            <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }} className="flex flex-col items-center">
                 <input
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    placeholder="Password"
-                    className="p-2 mb-4 w-80 rounded border pr-10"
+                    type="text"
+                    value={formData.fullname}
+                    onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
+                    placeholder="Fullname"
+                    autoComplete="name"
+                    className="p-2 mb-4 w-80 rounded border"
                 />
-                <button
-                    type="button"
-                    onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
-                    aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
-            </div>
-            <div className="relative">
                 <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirmPassword}
-                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    placeholder="Confirm Password"
-                    className="p-2 mb-4 w-80 rounded border pr-10"
+                    type="text"
+                    value={formData.username}
+                    onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                    placeholder="Username"
+                    autoComplete="username"
+                    className="p-2 mb-4 w-80 rounded border"
                 />
-                <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((prev) => !prev)}
-                    className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
-                    aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                <div className="relative">
+                    <input
+                        type={showPassword ? "text" : "password"}
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        placeholder="Password"
+                        autoComplete="new-password"
+                        className="p-2 mb-4 w-80 rounded border pr-10"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
+                        aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    >
+                        {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                </div>
+                <div className="relative">
+                    <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={formData.confirmPassword}
+                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                        placeholder="Confirm Password"
+                        autoComplete="new-password"
+                        className="p-2 mb-4 w-80 rounded border pr-10"
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        className="absolute inset-y-0 right-2 flex items-center text-lg text-gray-500 hover:text-gray-700"
+                        aria-label={showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                    >
+                        {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                </div>
+                <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="Email"
+                    autoComplete="email"
+                    className="p-2 mb-4 w-80 rounded border"
+                />          
+                <input
+                    type="date"
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    placeholder="Date of Birth"
+                    autoComplete="bday"
+                    className="p-2 mb-4 w-80 rounded border"
+                />
+                <input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="Phone (10-11 digits)"
+                    autoComplete="tel"
+                    className="p-2 mb-4 w-80 rounded border"
+                />
+                <select 
+                    className="p-2 mb-4 w-80 rounded border" 
+                    value={formData.gender} 
+                    onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
+                    autoComplete="sex"
                 >
-                    {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
-                </button>
-            </div>
-            <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                placeholder="Email"
-                className="p-2 mb-4 w-80 rounded border"
-            />          
-            <input
-                type="date"
-                value={formData.dob}
-                onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                placeholder="Date of Birth"
-                className="p-2 mb-4 w-80 rounded border"
-            />
-            <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="Phone (10-11 digits)"
-                className="p-2 mb-4 w-80 rounded border"
-            />
-            <select 
-                className="p-2 mb-4 w-80 rounded border" 
-                value={formData.gender} 
-                onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-            >
-                <option value="">Chọn giới tính</option>
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-                <option value="Khác">Khác</option>
-            </select>
+                    <option value="">Chọn giới tính</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Khác">Khác</option>
+                </select>
 
-            <button 
-                onClick={handleRegister} 
-                disabled={loading}
-                className="w-64 p-2 bg-black text-white rounded transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 drop-shadow-lg disabled:bg-gray-500"
-            >
-                {loading ? 'Đang xử lý...' : 'Register'}
-            </button>
+                <button 
+                    type="submit"
+                    disabled={loading}
+                    className="w-64 p-2 bg-black text-white rounded transition-all duration-300 ease-in-out hover:-translate-y-1 hover:scale-110 drop-shadow-lg disabled:bg-gray-500"
+                >
+                    {loading ? 'Đang xử lý...' : 'Register'}
+                </button>
+            </form>
         </div>
     );
 };

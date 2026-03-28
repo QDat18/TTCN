@@ -51,7 +51,7 @@ const NewDetail = () => {
       {/* Banner */}
       <div 
         className="w-full h-[300px] bg-cover bg-center"
-        style={{ backgroundImage: `url(${article.thumbnailUrl || 'https://via.placeholder.com/1200x300'})` }}
+        style={{ backgroundImage: `url(${article.thumbnailUrl || 'https://placehold.co/1200x300?text=News+Banner'})` }}
       ></div>
 
  

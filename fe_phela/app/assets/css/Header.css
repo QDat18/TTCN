@@ -4,7 +4,7 @@
 
 @layer components {
   .nav {
-    @apply bg-black flex justify-center items-center px-5 py-2.5 text-sm;
+    @apply bg-[#1f120b] flex justify-center items-center px-5 py-2.5 text-sm;
   }
 
   .hamburger-icon {
@@ -28,7 +28,7 @@
   }
 
   .sub-menu {
-    @apply absolute left-0 mt-5 bg-black shadow-lg p-2 invisible opacity-0 transition-all duration-300;
+    @apply absolute left-0 mt-5 bg-[#1f120b] shadow-lg p-2 invisible opacity-0 transition-all duration-300;
     min-width: 220px;
     z-index: 10;
   }
@@ -38,7 +38,7 @@
   }
 
   .sub-menu li {
-    @apply px-4 py-2 hover:bg-gray-100 hover:text-black rounded;
+    @apply px-4 py-2 hover:bg-[#d48437]/20 rounded;
   }
 
   .sub-menu li a {
@@ -64,7 +64,7 @@
 
   @media (max-width: 768px) {
     .menu-container {
-      @apply absolute top-0 right-0 w-70 h-screen bg-black flex flex-col items-start justify-start transition-all duration-300 mt-5;
+      @apply absolute top-0 right-0 w-70 h-screen bg-[#1f120b] flex flex-col items-start justify-start transition-all duration-300 mt-5;
       transform: translateX(100%);
       z-index: 10;
       padding-top: 64px;
@@ -100,42 +100,40 @@
       @apply px-4 py-2;
     }
   }
+
   .navbar-links {
-  display: flex;
-  align-items: center;
-}
+    display: flex;
+    align-items: center;
+  }
 
-/* Style cho user menu và dropdown */
-.user-menu {
-  position: relative;
-}
+  /* Style cho user menu và dropdown */
+  .user-menu {
+    position: relative;
+  }
 
-.user-menu > div {
-  display: flex;
-  align-items: center;
-}
+  .user-menu>div {
+    display: flex;
+    align-items: center;
+  }
 
-.user-menu span {
-  color: white;
-  font-size: 1rem;
-}
-/* Style cho dropdown menu */
-.dropdown-menu {
-  @apply absolute left-0 mt-5 bg-black shadow-lg p-2 invisible opacity-0 transition-all duration-300;
-  min-width: 220px;
-  z-index: 10;
-}
+  .user-menu span {
+    color: white;
+    font-size: 1rem;
+  }
 
-.user-menu:hover .dropdown-menu {
-  display: block;
-}
+  /* Style cho dropdown menu */
+  .dropdown-menu {
+    @apply absolute left-0 mt-5 bg-[#1f120b] shadow-lg p-2 invisible opacity-0 transition-all duration-300;
+    min-width: 220px;
+    z-index: 10;
+  }
 
-.dropdown-item {
-  @apply block text-white px-4 py-2 hover:bg-gray-100 hover:text-black rounded;
-}
+  .user-menu:hover .dropdown-menu {
+    display: block;
+  }
 
-.dropdown-item:hover {
-  background-color: #f0f0f0;
-}
+  .dropdown-item {
+    @apply block text-white px-4 py-2 hover:bg-[#d48437]/20 rounded;
 
+}
 }

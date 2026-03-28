@@ -121,6 +121,10 @@ public class CartController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleException(Exception ex) {
+        // Log the full stack trace for debugging
+        org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(CartController.class);
+        logger.error("Error in CartController: ", ex);
+
         Map<String, Object> response = new HashMap<>();
         response.put("success", false);
         response.put("message", "An unexpected error occurred: " + ex.getMessage());

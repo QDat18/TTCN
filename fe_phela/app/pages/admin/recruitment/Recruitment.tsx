@@ -2,13 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import Header from '~/components/admin/Header';
 import api from '~/config/axios';
-import '~/assets/css/DeliveryAddress.css';
 import { FaEdit, FaTrash, FaPlus, FaSearch, FaFilter, FaTimes } from 'react-icons/fa';
 import { FiLock } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
 
 export enum JobStatus {

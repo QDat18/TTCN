@@ -45,6 +45,7 @@ public class AuthenticationService {
 
     final AdminService adminService;
     final CustomerService customerService;
+    @org.springframework.context.annotation.Lazy
     final AuthenticationManager authenticationManager;
     final VerificationTokenRepository verificationTokenRepository;
     final EmailService emailService;
@@ -129,6 +130,18 @@ public class AuthenticationService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        // Kiểm tra role: Cho phép ADMIN, SUPER_ADMIN, STAFF đăng nhập portal quản trị
+        boolean isAdmin = userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") ||
+                               a.getAuthority().equals("ROLE_SUPER_ADMIN") ||
+                               a.getAuthority().equals("ROLE_STAFF"));
+
+        if (!isAdmin) {
+            log.warn("Login attempt for non-admin user on admin portal: {}", request.getUsername());
+            throw new org.springframework.security.authentication.BadCredentialsException("Tài khoản này không có quyền truy cập trang quản trị");
+        }
+
         return createResponseFromUserDetails(userDetails);
     }
 
@@ -139,6 +152,16 @@ public class AuthenticationService {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        // Kiểm tra role: Chỉ cho phép ROLE_CUSTOMER đăng nhập portal khách hàng
+        boolean isCustomer = userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"));
+
+        if (!isCustomer) {
+            log.warn("Login attempt for non-customer user on customer portal: {}", request.getUsername());
+            throw new org.springframework.security.authentication.BadCredentialsException("Tài khoản này không phải là tài khoản khách hàng");
+        }
+
         return createResponseFromUserDetails(userDetails);
     }
 

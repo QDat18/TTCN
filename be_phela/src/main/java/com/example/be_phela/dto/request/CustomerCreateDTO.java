@@ -28,6 +28,12 @@ public class CustomerCreateDTO {
     @NotBlank(message = "Giới tính không được để trống")
     private String gender;
 
+    @NotBlank(message = "Họ và tên không được để trống")
+    private String fullname;
+
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "^(0|\\+84)[3|5|7|8|9][0-9]{8}$", message = "Số điện thoại không hợp lệ")
+    private String phone;
 
     private Double latitude;
 

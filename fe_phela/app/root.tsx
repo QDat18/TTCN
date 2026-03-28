@@ -5,7 +5,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  Navigate,
   useNavigate,
   useLocation,
 } from "react-router";
@@ -13,10 +12,16 @@ import { useAuth, AuthProvider } from "./AuthContext";
 import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { toastContainerConfig } from './utils/notificationConfig';
-import 'react-toastify/dist/ReactToastify.css';
+import { AnimatePresence } from 'framer-motion';
+import GlobalLoading from './components/common/GlobalLoading';
+import PageTransition from './components/common/PageTransition';
 
 import type { Route } from "./+types/root";
-import "./app.css";
+
+// Import file CSS dưới dạng URL
+import toastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
+import appStyles from "./app.css?url";
+import headOrderStyles from "./assets/css/head_order.css?url";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,6 +34,9 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  { rel: "stylesheet", href: toastifyStyles },
+  { rel: "stylesheet", href: appStyles },
+  { rel: "stylesheet", href: headOrderStyles },
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -40,7 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-[#2b1b12]">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -49,17 +57,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-if (typeof window !== 'undefined' && !window.global) {
-  window.global = window;
-}
-
-const role = import.meta.env.VITE_ROLE;
-
 const AppWithAuth = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading } = useAuth();
-
+  const role = import.meta.env.VITE_ROLE;
 
   useEffect(() => {
     if (loading) return;
@@ -79,7 +81,16 @@ const AppWithAuth = () => {
     }
   }, [navigate, user, loading, location.pathname, role]);
 
-  return <Outlet />;
+  return (
+    <>
+      <GlobalLoading isLoading={loading} />
+      <AnimatePresence mode="wait">
+        <PageTransition key={location.pathname}>
+          <Outlet />
+        </PageTransition>
+      </AnimatePresence>
+    </>
+  );
 };
 
 export default function App() {
@@ -90,21 +101,6 @@ export default function App() {
     </AuthProvider>
   );
 }
-
-// export default function App() {
-//   const navigate = useNavigate();
-  
-//   useEffect(() => {
-//     if (role === 'admin') {
-//       navigate('/admin');
-//     } else if (role === 'customer') {
-//       navigate('/');
-//     }
-//   }, [navigate]);
-  
-//   return <Outlet />;
-// }
-
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";

@@ -34,6 +34,8 @@ public class OrderService implements IOrderService {
     AddressRepository addressRepository;
     CustomerMapper customerMapper;
     AdminRepository adminRepository;
+    OrderItemToppingRepository orderItemToppingRepository;
+    ProductRepository productRepository;
 
     private String generateOrderCode() {
         String code;
@@ -75,9 +77,13 @@ public class OrderService implements IOrderService {
         double totalAmount = cartService.calculateCartTotalFromItems(cart);
         double shippingFee = cartService.calculateShippingFee(cart.getCartId());
 
-        double totalDiscountFromPromos = cart.getPromotionCarts().stream()
+        double totalDiscountFromPromos = 0.0;
+        if (cart.getPromotionCarts() != null) {
+            totalDiscountFromPromos = cart.getPromotionCarts().stream()
+                .filter(pc -> pc.getDiscountAmount() != null)
                 .mapToDouble(PromotionCart::getDiscountAmount)
                 .sum();
+        }
 
         double finalAmount = totalAmount + shippingFee - totalDiscountFromPromos;
 
@@ -98,13 +104,29 @@ public class OrderService implements IOrderService {
                 .build();
 
         List<OrderItem> orderItems = cart.getCartItems().stream()
-                .map(cartItem -> OrderItem.builder()
-                        .order(order)
-                        .product(cartItem.getProduct())
-                        .quantity(cartItem.getQuantity())
-                        .amount(cartItem.getAmount())
-                        .note(cartItem.getNote())
-                        .build())
+                .map(cartItem -> {
+                    OrderItem orderItem = OrderItem.builder()
+                            .order(order)
+                            .product(cartItem.getProduct())
+                            .productSize(cartItem.getProductSize())
+                            .quantity(cartItem.getQuantity())
+                            .amount(cartItem.getAmount())
+                            .note(cartItem.getNote())
+                            .build();
+
+                    if (cartItem.getToppings() != null && !cartItem.getToppings().isEmpty()) {
+                        List<OrderItemTopping> selectedToppings = cartItem.getToppings().stream()
+                                .map(topping -> OrderItemTopping.builder()
+                                        .orderItem(orderItem)
+                                        .productId(topping.getProductId())
+                                        .toppingName(topping.getProductName())
+                                        .price(topping.getOriginalPrice() != null ? topping.getOriginalPrice() : 0.0)
+                                        .build())
+                                .collect(Collectors.toList());
+                        orderItem.setSelectedToppings(selectedToppings);
+                    }
+                    return orderItem;
+                })
                 .collect(Collectors.toList());
         order.setOrderItems(orderItems);
 
@@ -289,10 +311,14 @@ public class OrderService implements IOrderService {
                 .orderItems(order.getOrderItems().stream()
                         .map(item -> OrderItemDTO.builder()
                                 .productId(item.getProduct().getProductId())
+                                .productSizeId(item.getProductSize() != null ? item.getProductSize().getProductSizeId() : null)
                                 .quantity(item.getQuantity())
                                 .price(item.getAmount() / item.getQuantity()) // Tạm tính giá
                                 .amount(item.getAmount())
                                 .note(item.getNote())
+                                .toppingNames(item.getSelectedToppings() != null ?
+                                        item.getSelectedToppings().stream().map(OrderItemTopping::getToppingName).collect(Collectors.toList()) :
+                                        new ArrayList<>())
                                 .build())
                         .collect(Collectors.toList()))
                 .build();
@@ -386,7 +412,10 @@ public class OrderService implements IOrderService {
             }
 
             CartItem existingItem = cart.getCartItems().stream()
-                    .filter(item -> item.getProduct().getProductId().equals(orderItem.getProduct().getProductId()))
+                    .filter(item -> item.getProduct().getProductId().equals(orderItem.getProduct().getProductId()) &&
+                            (orderItem.getProductSize() == null ? item.getProductSize() == null :
+                                    (item.getProductSize() != null && item.getProductSize().getProductSizeId().equals(orderItem.getProductSize().getProductSizeId()))) &&
+                            isSameToppingsAfterOrder(item.getToppings(), orderItem.getSelectedToppings()))
                     .findFirst()
                     .orElse(null);
 
@@ -395,12 +424,21 @@ public class OrderService implements IOrderService {
                 existingItem.setAmount(existingItem.getAmount() + orderItem.getAmount());
                 existingItem.setNote(orderItem.getNote());
             } else {
+                List<Product> toppingsToRestore = new ArrayList<>();
+                if (orderItem.getSelectedToppings() != null) {
+                    for (OrderItemTopping ot : orderItem.getSelectedToppings()) {
+                        productRepository.findById(ot.getProductId()).ifPresent(toppingsToRestore::add);
+                    }
+                }
+
                 CartItem cartItem = CartItem.builder()
                         .cart(cart)
                         .product(orderItem.getProduct())
+                        .productSize(orderItem.getProductSize())
                         .quantity(orderItem.getQuantity())
                         .amount(orderItem.getAmount())
                         .note(orderItem.getNote())
+                        .toppings(toppingsToRestore)
                         .build();
                 cart.getCartItems().add(cartItem);
             }
@@ -408,6 +446,15 @@ public class OrderService implements IOrderService {
 
         cart.setTotalAmount(cartService.calculateCartTotalFromItems(cart));
         cartRepository.save(cart);
+    }
+
+    private boolean isSameToppingsAfterOrder(List<Product> cartToppings, List<OrderItemTopping> orderToppings) {
+        if (cartToppings == null && orderToppings == null) return true;
+        if (cartToppings == null || orderToppings == null) return false;
+        if (cartToppings.size() != orderToppings.size()) return false;
+        List<String> ids1 = cartToppings.stream().map(Product::getProductId).sorted().toList();
+        List<String> ids2 = orderToppings.stream().map(OrderItemTopping::getProductId).sorted().toList();
+        return ids1.equals(ids2);
     }
 
     // Lấy danh sách hóa đơn theo trạng thái

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { createNews, updateNews, getNewsById } from '~/services/newsService';
-import '~/assets/css/DeliveryAddress.css'
 
 interface NewsFormProps {
   newsId?: string | null; 

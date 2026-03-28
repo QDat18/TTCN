@@ -16,7 +16,6 @@ import {
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
 import { FiChevronLeft, FiChevronRight, FiLock, FiDownload, FiPrinter, FiFileText, FiBarChart2, FiTrendingUp, FiPieChart, FiList } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';

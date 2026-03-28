@@ -6,7 +6,6 @@ import { FaFacebook } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { TbBrandYoutube } from "react-icons/tb";
 import { PiTiktokLogo } from "react-icons/pi";
-import "../../assets/css/Footer.css";
 
 const Footer = () => {
     return (

@@ -11,11 +11,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@ToString(exclude = {"promotionCarts", "promotionOrders"})
+@ToString(exclude = {"promotionCarts"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,4 +22,5 @@ public class ProductResponseDTO {
     private String imageUrl;
     private String categoryCode;
     private ProductStatus status;
+    private List<ProductSizeResponseDTO> sizes;
 }

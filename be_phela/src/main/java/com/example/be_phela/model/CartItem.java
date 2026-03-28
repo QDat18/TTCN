@@ -6,7 +6,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.UuidGenerator;
 
-import java.math.BigDecimal;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +29,10 @@ public class CartItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_size_id")
+    private ProductSize productSize;
+
     @NotNull(message = "Quantity is required")
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -37,4 +42,12 @@ public class CartItem {
 
     @Column(name = "note")
     private String note;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "cart_item_toppings",
+            joinColumns = @JoinColumn(name = "cart_item_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
+    )
+    private java.util.List<Product> toppings;
 }

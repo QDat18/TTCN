@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
-import '~/assets/css/DeliveryAddress.css'
 
 interface News {
   newsId: string;
@@ -165,7 +164,7 @@ const NewsManager = () => {
                 {newsList.map((news) => (
                   <tr key={news.newsId}>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                      <img src={news.thumbnailUrl || 'https://via.placeholder.com/100'} alt={news.title} className="w-24 h-16 object-cover rounded" />
+                      <img src={news.thumbnailUrl || 'https://placehold.co/100x100?text=No+Img'} alt={news.title} className="w-24 h-16 object-cover rounded" />
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       <p className="text-gray-900 whitespace-no-wrap font-bold">{news.title}</p>

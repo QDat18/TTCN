@@ -4,7 +4,6 @@ import api from '~/config/axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
 import { Doughnut, Bar } from 'react-chartjs-2';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
 import { FiChevronLeft, FiChevronRight, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';

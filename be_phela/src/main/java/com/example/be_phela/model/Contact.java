@@ -19,10 +19,10 @@ import java.time.LocalDateTime;
 public class Contact {
     @Id
     @UuidGenerator
-    @Column(name = "contactId", nullable = false)
+    @Column(name = "contact_id", nullable = false)
     private String contactId;
 
-    @Column(name = "fullName")
+    @Column(name = "full_name")
     private String fullName;
 
     @Column(name = "email")

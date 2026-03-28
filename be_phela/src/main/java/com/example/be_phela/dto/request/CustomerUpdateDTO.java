@@ -24,6 +24,9 @@ public class CustomerUpdateDTO {
     @NotBlank(message = "Giới tính không được để trống")
     private String gender;
 
+    private String fullname;
+    private String phone;
+
     // Validation cho latitude và longitude
     @DecimalMin(value = "-90.0", message = "Latitude phải >= -90")
     @DecimalMax(value = "90.0", message = "Latitude phải <= 90")

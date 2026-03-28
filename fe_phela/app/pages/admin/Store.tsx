@@ -2,9 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Header from '~/components/admin/Header';
 import api from '~/config/axios';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FiEdit, FiTrash2, FiPlus, FiSearch, FiMapPin, FiToggleLeft, FiToggleRight } from 'react-icons/fi';
-import "~/assets/css/DeliveryAddress.css"
 import { useAuth } from '~/AuthContext';
 import type { Province as ProvinceDTO, District as DistrictDTO } from '~/services/locationService';
 import { getLocationHierarchy } from '~/services/locationService';

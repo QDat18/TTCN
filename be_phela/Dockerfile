@@ -1,6 +1,6 @@
-# ----- STAGE 1: Build với JDK 22 -----
-# Sử dụng một image có sẵn Maven và JDK 22 để build code
-FROM maven:3.9-eclipse-temurin-22 AS builder
+# ----- STAGE 1: Build with JDK 21 -----
+# Use image with Maven and JDK 21
+FROM maven:3.9-eclipse-temurin-21 AS builder
 
 # Tạo thư mục làm việc
 WORKDIR /app
@@ -16,10 +16,9 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 
-# ----- STAGE 2: Run với JRE 22 -----
-# Sử dụng một image JRE (Java Runtime Environment) 22 nhỏ gọn để chạy ứng dụng
-# JRE nhỏ hơn JDK, an toàn hơn cho môi trường production
-FROM openjdk:22-jdk-slim
+# ----- STAGE 2: Run with JRE 21 -----
+# Use openjdk:21-jdk-slim
+FROM openjdk:21-jdk-slim
 
 # Tạo thư mục làm việc
 WORKDIR /app

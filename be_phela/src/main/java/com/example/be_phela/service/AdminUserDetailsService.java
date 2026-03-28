@@ -16,7 +16,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 
+import org.springframework.context.annotation.Primary;
+
+
 @Service
+@Primary
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AdminUserDetailsService implements UserDetailsService {

@@ -1,73 +1,15 @@
 @import "tailwindcss";
 
-@layer base {}
-
 @layer components {
-    .navbar-order {
-        @apply flex justify-center gap-96 items-center bg-black px-5 py-2.5;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 12px 20px;
+    .head-order-nav {
+        @apply bg-[#1f120b] text-white py-3 shadow-md;
     }
 
-    .navbar-logo img {
-        @apply h-12 w-16;
+    .head-order-link {
+        @apply text-white/80 hover:text-white transition-colors relative;
     }
 
-    .navbar-links {
-        @apply flex gap-8 items-center;
-    }
-
-    .navbar-links a {
-        @apply text-sm uppercase;
-    }
-
-    .navbar-links a:hover {
-        @apply underline;
-    }
-
-    .btn-login,
-    .btn-register {
-        @apply px-4 py-2 rounded-md text-sm font-medium transition-all duration-300;
-    }
-
-    .btn-login {
-        @apply text-white border border-white hover:bg-white hover:text-gray-900;
-    }
-
-    .btn-register {
-        @apply bg-cyan-100 text-black hover:bg-cyan-600 hover:text-white;
-    }
-
-    .user-menu {
-        position: relative;
-    }
-
-    .user-menu>div {
-        display: flex;
-        align-items: center;
-    }
-
-    .user-menu span {
-        color: white;
-        font-size: 1rem;
-    }
-
-    /* Style cho dropdown menu */
-    .dropdown-menu {
-        @apply absolute left-0 mt-5 bg-black shadow-lg p-2 invisible opacity-0 transition-all duration-300;
-        min-width: 220px;
-        z-index: 10;
-    }
-
-    .user-menu:hover .dropdown-menu {
-        display: block;
-    }
-
-    .dropdown-item {
-        @apply block text-white px-4 py-2 hover:bg-gray-100 hover:text-black rounded text-sm;
-    }
-
-    .dropdown-item:hover {
-        background-color: #f0f0f0;
+    .head-order-link.active {
+        @apply text-white after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-full after:h-0.5 after:bg-white;
     }
 }

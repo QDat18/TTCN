@@ -11,11 +11,16 @@ import java.util.Map;
 
 @Service
 public class FileStorageService {
-    @Autowired
-    private Cloudinary cloudinary;
+    private final Cloudinary cloudinary;
+    private static final String BASE_FOLDER = "phelacoffe/Phela/";
 
-    public String storeFile(MultipartFile file) throws IOException {
-        return uploadToCloudinary(file, "products");
+    @Autowired
+    public FileStorageService(Cloudinary cloudinary) {
+        this.cloudinary = cloudinary;
+    }
+
+    public String storeFile(MultipartFile file, String subFolder) throws IOException {
+        return uploadToCloudinary(file, subFolder);
     }
 
     public String storeNewsThumbnail(MultipartFile file) throws IOException {
@@ -23,25 +28,57 @@ public class FileStorageService {
     }
 
     public String storeBannerImage(MultipartFile file) throws IOException {
-        return uploadToCloudinary(file, "banners");
+        return uploadToCloudinary(file, "banner"); // Updated to match screenshot
     }
 
-    public String storeChatImage(MultipartFile file) throws IOException { // Thêm phương thức này
+    public String storePromotionImage(MultipartFile file) throws IOException {
+        return uploadToCloudinary(file, "promotions");
+    }
+
+    public String storeChatImage(MultipartFile file) throws IOException {
         return uploadToCloudinary(file, "chat");
     }
 
-    private String uploadToCloudinary(MultipartFile file, String folderName) throws IOException {
-        if (file == null || file.isEmpty()) {
-
-            return null;
-        }
-
-        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-                "upload_preset", "phe_la",
-                "folder", folderName
+    public Map listResources(String folderName) throws Exception {
+        String fullPath = BASE_FOLDER + folderName;
+        return cloudinary.api().resources(ObjectUtils.asMap(
+                "type", "upload",
+                "prefix", fullPath,
+                "max_results", 100
         ));
-
-        return (String) uploadResult.get("secure_url");
     }
 
+    private String uploadToCloudinary(MultipartFile file, String folderName) throws IOException {
+        try {
+            if (file == null || file.isEmpty()) {
+                System.out.println("--- CLOUDINARY DEBUG: File is null or empty");
+                return null;
+            }
+
+            String fullPath = BASE_FOLDER + folderName;
+            System.out.println("--- CLOUDINARY DEBUG: Uploading to: " + fullPath);
+            System.out.println("--- CLOUDINARY DEBUG: File: " + file.getOriginalFilename() + " (" + file.getSize() + " bytes)");
+
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                    "folder", fullPath
+            ));
+
+            System.out.println("--- CLOUDINARY DEBUG: Result: " + uploadResult);
+
+            if (uploadResult != null) {
+                String secureUrl = (String) uploadResult.get("secure_url");
+                String url = (String) uploadResult.get("url");
+                String resultUrl = secureUrl != null ? secureUrl : url;
+                System.out.println("--- CLOUDINARY DEBUG: Success URL: " + resultUrl);
+                return resultUrl;
+            }
+            
+            System.err.println("--- CLOUDINARY DEBUG: uploadResult is null");
+            return null;
+        } catch (Exception e) {
+            System.err.println("--- CLOUDINARY DEBUG ERROR: " + e.getMessage());
+            e.printStackTrace();
+            throw new IOException("Failed to upload to Cloudinary: " + e.getMessage(), e);
+        }
+    }
 }

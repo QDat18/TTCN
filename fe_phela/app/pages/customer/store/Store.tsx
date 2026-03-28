@@ -63,12 +63,12 @@ const Store = () => {
       {/* Map Overlay */}
       {selectedBranch && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-start justify-center pt-20">
-          <div className="bg-white mx-4 max-w-4xl w-full rounded-lg shadow-lg">
-            <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-xl font-bold">{selectedBranch.branchName}</h3>
+          <div className="bg-[#1f120b] mx-4 max-w-4xl w-full rounded-lg border border-[#3d1d11] shadow-2xl text-white">
+            <div className="flex justify-between items-center p-4 border-b border-[#3d1d11]">
+              <h3 className="text-xl font-bold text-[#d48437]">{selectedBranch.branchName}</h3>
               <button
                 onClick={closeMap}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
+                className="text-white/60 hover:text-white text-2xl"
               >
                 ×
               </button>
@@ -108,7 +108,7 @@ const Store = () => {
 
       {/* Main Content */}
       <div className={selectedBranch ? 'blur-sm' : ''}>
-        <div className="fixed top-0 left-0 w-full bg-white shadow-md z-50">
+        <div className="fixed top-0 left-0 w-full bg-[#1f120b] shadow-md z-50">
           <Header />
         </div>
         
@@ -127,32 +127,35 @@ const Store = () => {
         </div>
 
         {/* Main Content */}
-        <main className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-6 text-center">Hệ thống cửa hàng</h1>
+        <main className="container mx-auto px-4 py-8 text-white">
+          <h1 className="text-3xl font-black mb-8 text-center text-[#d48437]">HỆ THỐNG CỬA HÀNG</h1>
           {loading ? (
-            <p className="text-center">Đang tải...</p>
+            <p className="text-center text-white/60">Đang tải...</p>
           ) : (
             <div className="item_store_li">
               {Object.entries(groupedByCity).map(([city, districts]) => (
                 <div key={city} className="mb-10 gap-6">
-                  <h2 className="text-2xl font-bold text-center mb-6">{city}</h2>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                  <h2 className="text-2xl font-bold text-center mb-10 pb-2 border-b border-[#3d1d11] inline-block w-full">{city}</h2>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
                     {Object.entries(districts).map(([district, branches]) => (
-                      <div key={district} className="mb-6">
-                        <h3 className="text-xl font-semibold text-brown-700 mb-3">{district}</h3>
-                        <div>
+                      <div key={district} className="bg-[#1f120b] p-6 rounded-2xl border border-[#3d1d11] shadow-xl hover:border-[#d48437]/30 transition-all">
+                        <h3 className="text-xl font-bold text-[#d48437] mb-5 flex items-center gap-2">
+                          <span className="w-2 h-2 bg-[#d48437] rounded-full"></span>
+                          {district}
+                        </h3>
+                        <div className="space-y-6">
                           {branches.map((branch) => (
-                            <div key={branch.branchCode} className="flex items-start mb-3">
-                              <span className="text-brown-600 mr-2">📍</span>
-                              <div>
+                            <div key={branch.branchCode} className="flex items-start group">
+                              <span className="text-[#d48437] mr-3 mt-1 text-lg">📍</span>
+                              <div className="flex-1">
                                 <button
                                   onClick={() => handleBranchClick(branch)}
-                                  className="text-brown-800 font-semibold hover:text-brown-600 hover:underline cursor-pointer bg-transparent border-none p-0 text-left mb-1"
+                                  className="text-white font-bold hover:text-[#d48437] transition-colors cursor-pointer bg-transparent border-none p-0 text-left mb-1 block w-full"
                                 >
                                   {branch.branchName}
                                 </button>
-                                <p className="text-brown-800">{branch.address}</p>
-                                <p className="text-brown-600 text-sm">Số điện thoại: 1900 3013</p>
+                                <p className="text-white/70 text-sm leading-relaxed">{branch.address}</p>
+                                <p className="text-[#d48437]/80 text-xs mt-2 font-medium">Hotline: 1900 3013</p>
                               </div>
                             </div>
                           ))}

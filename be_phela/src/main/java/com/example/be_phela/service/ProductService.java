@@ -51,7 +51,8 @@ public class ProductService implements IProductService {
         // Upload ảnh lên Cloudinary và lấy URL
         if (image != null && !image.isEmpty()) {
             log.info("Uploading image for new product...");
-            String imageUrl = fileStorageService.storeFile(image);
+            String folder = getFolderForCategory(categoryCode);
+            String imageUrl = fileStorageService.storeFile(image, folder);
             log.info("Image URL received: {}", imageUrl);
             productDTO.setImageUrl(imageUrl);
         } else {
@@ -78,7 +79,8 @@ public class ProductService implements IProductService {
 
 
         if (image != null && !image.isEmpty()) {
-            String newImageUrl = fileStorageService.storeFile(image);
+            String folder = getFolderForCategory(categoryCode);
+            String newImageUrl = fileStorageService.storeFile(image, folder);
             productDTO.setImageUrl(newImageUrl);
         } else if (productDTO.getImageUrl() != null) {
             productDTO.setImageUrl(productDTO.getImageUrl());
@@ -171,6 +173,20 @@ public class ProductService implements IProductService {
         return productRepository.findByCategory_CategoryCode(category.getCategoryCode(), pageable);
     }
 
-
+    private String getFolderForCategory(String categoryCode) {
+        if (categoryCode == null) return "products";
+        return switch (categoryCode.toUpperCase()) {
+            case "CF" -> "coffee";
+            case "TEA" -> "olongmatcha"; // Based on screenshot
+            case "COLD_BREW" -> "cold_brew";
+            case "SIGNATURE" -> "signature";
+            case "PLUS" -> "plus";
+            case "FRENCH_PRESS" -> "french_press";
+            case "MOKA_POT" -> "moka_pot";
+            case "SYPHON" -> "syphon";
+            case "TOPPING" -> "topping";
+            default -> categoryCode.toLowerCase();
+        };
+    }
 
 }

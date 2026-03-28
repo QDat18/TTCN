@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FiChevronRight, FiShoppingBag } from 'react-icons/fi';
 import HeadOrder from '~/components/customer/HeadOrder';
 import api from '~/config/axios';
 import { useAuth } from '~/AuthContext';
@@ -75,58 +76,69 @@ const MyOrders = () => {
 
     // --- Giao diện Render ---
     if (loading) {
-        return <div className="text-center py-20">Đang tải lịch sử đơn hàng...</div>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-white">
+                <div className="animate-spin rounded-full h-10 w-10 border-4 border-white/10 border-t-[#d48437] mb-6"></div>
+                <p className="text-[#d48437] font-black uppercase tracking-widest text-xs">Đang tải lịch sử đơn hàng...</p>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="text-center py-20 text-red-500">{error}</div>;
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center text-red-500 p-8 text-center">
+                <p className="text-xl font-black uppercase mb-4 tracking-widest">Đã xảy ra lỗi</p>
+                <p className="text-white/60 mb-8 max-w-md">{error}</p>
+                <button onClick={() => window.location.reload()} className="px-10 py-3 bg-red-600/10 border border-red-600/30 text-red-500 rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-red-600/20 transition-all">Thử lại</button>
+            </div>
+        );
     }
 
     return (
-        <div>
-            <div className="fixed top-0 left-0 w-full bg-white shadow-md z-40">
+        <div className="min-h-screen text-white pb-20">
+            <div className="fixed top-0 left-0 w-full bg-[#1f120b] shadow-md z-40">
                 <HeadOrder />
             </div>
-            <div className="container mx-auto mt-20 p-4 max-w-5xl">
-                <h1 className="text-3xl font-bold mb-6">Lịch sử đơn hàng</h1>
+            <div className="container mx-auto pt-28 p-4 max-w-5xl">
+                <h1 className="text-3xl font-black uppercase tracking-tight mb-8">Lịch sử đơn hàng</h1>
 
                 {orders.length > 0 ? (
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                    <div className="bg-[#1f120b] rounded-3xl shadow-2xl border border-[#3d1d11] overflow-hidden">
+                        <table className="min-w-full divide-y divide-[#331d11]">
+                            <thead className="bg-[#2b1b12]">
                                 <tr>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mã Đơn Hàng</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày Đặt</th>
-                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tổng Tiền</th>
-                                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng Thái Đơn</th>
-                                    <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng Thái Thanh Toán</th>
-                                    <th scope="col" className="relative px-6 py-3">
+                                    <th scope="col" className="px-6 py-4 text-left text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Mã Đơn Hàng</th>
+                                    <th scope="col" className="px-6 py-4 text-left text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Ngày Đặt</th>
+                                    <th scope="col" className="px-6 py-4 text-left text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Tổng Tiền</th>
+                                    <th scope="col" className="px-6 py-4 text-center text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Trạng Thái Đơn</th>
+                                    <th scope="col" className="px-6 py-4 text-center text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Thanh Toán</th>
+                                    <th scope="col" className="relative px-6 py-4">
                                         <span className="sr-only">Hành động</span>
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-[#1f120b] divide-y divide-[#331d11]">
                                 {orders.map((order) => {
                                     const statusStyle = getStatusStyle(order.status);
                                     const paymentStatusStyle = getPaymentStatusStyle(order.paymentStatus);
                                     return (
-                                        <tr key={order.orderId} className="hover:bg-gray-50">
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order.orderCode}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{new Date(order.orderDate).toLocaleDateString('vi-VN')}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{order.finalAmount.toLocaleString()} VND</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-center">
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusStyle.className}`}>
+                                        <tr key={order.orderId} className="hover:bg-white/[0.03] transition-colors group">
+                                            <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-white group-hover:text-[#d48437]">#{order.orderCode}</td>
+                                            <td className="px-6 py-5 whitespace-nowrap text-sm text-white/60">{new Date(order.orderDate).toLocaleDateString('vi-VN')}</td>
+                                            <td className="px-6 py-5 whitespace-nowrap text-sm font-black text-[#d48437]">{order.finalAmount.toLocaleString()}₫</td>
+                                            <td className="px-6 py-5 whitespace-nowrap text-center">
+                                                <span className={`px-3 py-1 inline-flex text-[10px] leading-4 font-black rounded-full uppercase tracking-widest border ${statusStyle.className.replace('bg-green-100 text-green-800', 'bg-green-500/10 text-green-500 border-green-500/20').replace('bg-red-100 text-red-800', 'bg-red-500/10 text-red-500 border-red-500/20').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20').replace('bg-blue-100 text-blue-800', 'bg-blue-500/10 text-blue-500 border-blue-500/20').replace('bg-gray-100 text-gray-800', 'bg-white/10 text-white/60 border-white/20')}`}>
                                                     {statusStyle.text}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-center">
-                                                <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${paymentStatusStyle.className}`}>
+                                            <td className="px-6 py-5 whitespace-nowrap text-center">
+                                                <span className={`px-3 py-1 inline-flex text-[10px] leading-4 font-black rounded-full uppercase tracking-widest border ${paymentStatusStyle.className.replace('bg-green-100 text-green-800', 'bg-green-500/10 text-green-500 border-green-500/20').replace('bg-red-100 text-red-800', 'bg-red-500/10 text-red-500 border-red-500/20').replace('bg-yellow-100 text-yellow-800', 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20').replace('bg-gray-100 text-gray-800', 'bg-white/10 text-white/60 border-white/20')}`}>
                                                     {paymentStatusStyle.text}
                                                 </span>
                                             </td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <Link to={`/my-orders/${order.orderId}`} className="text-primary hover:text-primary-dark">
-                                                    Xem chi tiết
+                                            <td className="px-6 py-5 whitespace-nowrap text-right text-sm">
+                                                <Link to={`/my-orders/${order.orderId}`} className="text-white font-black text-[10px] uppercase tracking-widest hover:text-[#d48437] transition-all flex items-center justify-end gap-1">
+                                                    Chi tiết <FiChevronRight />
                                                 </Link>
                                             </td>
                                         </tr>
@@ -136,10 +148,13 @@ const MyOrders = () => {
                         </table>
                     </div>
                 ) : (
-                    <div className="text-center py-12 bg-white rounded-lg shadow-md">
-                        <p className="text-gray-500">Bạn chưa có đơn hàng nào.</p>
-                        <Link to="/products" className="mt-4 inline-block px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors">
-                            Bắt đầu mua sắm
+                    <div className="text-center py-20 bg-[#1f120b] rounded-3xl border border-[#3d1d11] shadow-2xl">
+                        <div className="w-20 h-20 bg-[#2b1b12] rounded-full flex items-center justify-center mx-auto mb-6">
+                           <FiShoppingBag className="text-3xl text-white/10" />
+                        </div>
+                        <p className="text-white/40 uppercase tracking-[0.2em] font-black text-sm mb-8">Bạn chưa có đơn hàng nào</p>
+                        <Link to="/products" className="inline-block px-10 py-4 bg-[#d48437] text-white rounded-full font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#e59447] transition-all hover:-translate-y-1 shadow-xl shadow-[#d48437]/20">
+                            Khám phá menu ngay
                         </Link>
                     </div>
                 )}

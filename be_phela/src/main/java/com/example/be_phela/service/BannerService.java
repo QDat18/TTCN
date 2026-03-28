@@ -24,26 +24,38 @@ public class BannerService {
 
     @Transactional
     public BannerResponseDTO createBanner(MultipartFile file) throws IOException {
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Banner image file is required");
-        }
-        
-        String imageUrl = fileStorageService.storeBannerImage(file);
-        if (imageUrl == null) {
-            throw new IOException("Failed to upload banner image");
-        }
-        
-        LocalDateTime now = LocalDateTime.now();
+        try {
+            if (file == null || file.isEmpty()) {
+                throw new IllegalArgumentException("Banner image file is required");
+            }
+            
+            System.out.println("--- DEBUG: Starting banner upload ---");
+            String imageUrl = fileStorageService.storeBannerImage(file);
+            System.out.println("--- DEBUG: Image URL from Cloudinary: " + imageUrl);
+            
+            if (imageUrl == null) {
+                throw new IOException("Failed to upload banner image to Cloudinary");
+            }
+            
+            LocalDateTime now = LocalDateTime.now();
 
-        Banner banner = Banner.builder()
-                .imageUrl(imageUrl)
-                .status(BannerStatus.ACTIVE)
-                .createdAt(now)
-                .updatedAt(now)
-                .build();
+            Banner banner = Banner.builder()
+                    .imageUrl(imageUrl)
+                    .status(BannerStatus.ACTIVE)
+                    .createdAt(now)
+                    .updatedAt(now)
+                    .build();
 
-        bannerRepository.save(banner);
-        return mapToResponseDTO(banner);
+            System.out.println("--- DEBUG: Saving banner to DB: " + banner);
+            Banner savedBanner = bannerRepository.save(banner);
+            System.out.println("--- DEBUG: Saved banner ID: " + savedBanner.getBannerId());
+            
+            return mapToResponseDTO(savedBanner);
+        } catch (Exception e) {
+            System.err.println("--- DEBUG ERROR in createBanner: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -63,6 +75,30 @@ public class BannerService {
 
         bannerRepository.save(banner);
         return mapToResponseDTO(banner);
+    }
+
+    @Transactional
+    public BannerResponseDTO updateBanner(String bannerId, MultipartFile file) throws IOException {
+        try {
+            Banner banner = bannerRepository.findById(bannerId)
+                    .orElseThrow(() -> new RuntimeException("Banner not found with id: " + bannerId));
+
+            if (file != null && !file.isEmpty()) {
+                System.out.println("Updating banner image for ID: " + bannerId);
+                String imageUrl = fileStorageService.storeBannerImage(file);
+                if (imageUrl != null) {
+                    banner.setImageUrl(imageUrl);
+                }
+            }
+
+            banner.setUpdatedAt(LocalDateTime.now());
+            Banner updatedBanner = bannerRepository.save(banner);
+            return mapToResponseDTO(updatedBanner);
+        } catch (Exception e) {
+            System.err.println("CRITICAL ERROR in updateBanner: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Transactional

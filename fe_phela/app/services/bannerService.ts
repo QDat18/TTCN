@@ -65,11 +65,7 @@ export const createBanner = async (bannerData: BannerCreateDTO) => {
     // Backend expects 'file' parameter, not 'imageFile'
     formData.append('file', bannerData.imageFile);
 
-    const response = await api.post('/api/admin/banners', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
+    const response = await api.post('/api/admin/banners', formData);
     return response.data;
 };
 
@@ -93,11 +89,7 @@ export const updateBanner = async (bannerId: string, bannerData: Partial<BannerC
         formData.append('file', bannerData.imageFile);
     }
 
-    const response = await api.put(`/api/admin/banners/${bannerId}`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
+    const response = await api.put(`/api/admin/banners/${bannerId}`, formData);
     return response.data;
 };
 

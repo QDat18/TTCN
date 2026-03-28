@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Header from '~/components/customer/Header';
-import '~/assets/css/DeliveryAddress.css'
 import { Link } from 'react-router-dom';
 import { getPublicJobPostings, getApplicationCount } from '~/services/jobService';
 

@@ -24,6 +24,7 @@
     "crypto": "^1.0.1",
     "crypto-browserify": "^3.12.1",
     "express": "^5.1.0",
+    "framer-motion": "^12.38.0",
     "isbot": "^5.1.17",
     "leaflet": "^1.9.4",
     "lodash": "^4.17.21",

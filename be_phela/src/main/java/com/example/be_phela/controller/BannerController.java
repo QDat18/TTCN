@@ -46,6 +46,14 @@ public class BannerController {
         return ResponseEntity.ok(bannerService.updateBannerStatus(bannerId, status));
     }
 
+    @PutMapping(value = "/admin/banners/{bannerId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
+    public ResponseEntity<BannerResponseDTO> updateBanner(
+            @PathVariable String bannerId,
+            @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok(bannerService.updateBanner(bannerId, file));
+    }
+
     @DeleteMapping("/admin/banners/{bannerId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<Void> deleteBanner(@PathVariable String bannerId) {

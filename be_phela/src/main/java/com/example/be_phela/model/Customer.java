@@ -3,7 +3,9 @@ package com.example.be_phela.model;
 import com.example.be_phela.model.enums.Roles;
 import com.example.be_phela.model.enums.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -39,6 +41,12 @@ public class Customer implements UserDetails {
     @Column(name = "gender",nullable = false)
     private String gender;
 
+    @Column(name = "fullname")
+    private String fullname;
+
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "password",nullable = false)
     private String password;
 
@@ -66,15 +74,9 @@ public class Customer implements UserDetails {
     @Column(name = "point_use", nullable = false)
     private Double pointUse = 0.0;
 
-    // Hạn chế số lần đăng nhập sai để tránh tấn công brute force
     @Builder.Default
     @Column(name = "failed_login_attempts", nullable = false)
     private int failedLoginAttempts = 0;
-
-//    // Số lần hủy đơn liên tiếp (>5 -> cấm tài khoản)
-//    @Builder.Default
-//    @Column(name = "order_cancel_times",nullable = false)
-//    private int orderCancelTimes = 0;
 
     @Column(name = "latitude")
     Double latitude;

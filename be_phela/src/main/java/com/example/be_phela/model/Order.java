@@ -46,7 +46,7 @@ public class Order {
     private Address address;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
+    @JoinColumn(name = "branch_code", nullable = false)
     private Branch branch;
 
     @NotNull(message = "Order status is required")
@@ -71,7 +71,7 @@ public class Order {
     // Phí ship
     @Builder.Default
     @Column(name = "shipping_fee", nullable = false)
-    private Double shippingFee = Double.NaN;
+    private Double shippingFee = 0.0;
 
     @Column(name = "final_amount", nullable = false)
     private Double finalAmount;

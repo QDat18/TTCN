@@ -8,7 +8,7 @@ const api: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 60000, // Tăng timeout lên 60s cho payment/order operations
   headers: {
-    'Content-Type': 'application/json',
+    // Axios will automatically set Content-Type based on request data
   },
   withCredentials: true, // Enable sending cookies and credentials
 });

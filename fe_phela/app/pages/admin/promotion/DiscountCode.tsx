@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Header from '~/components/admin/Header';
 import api from '~/config/axios';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from '~/AuthContext';
 import { FiPlus, FiEdit2, FiTrash2, FiChevronLeft, FiChevronRight, FiX, FiPercent, FiDollarSign, FiCalendar, FiClock, FiLock } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
